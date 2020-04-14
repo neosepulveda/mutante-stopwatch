@@ -5,7 +5,7 @@ import "./App.css";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
-  const [seconds, setSeconds] = useState(0);
+  const [time, setTime] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [counter, setCounter] = useState(0);
 
@@ -18,7 +18,7 @@ function App() {
   }
 
   function resetStopwatch() {
-    setSeconds(0.0);
+    setTime(0.0);
     setIsActive(false);
   }
 
@@ -34,13 +34,17 @@ function App() {
     let interval = null;
     if (isActive) {
       interval = setInterval(() => {
-        setSeconds((seconds) => seconds + 0.01);
+        setTime((time) => time + 0.01);
       }, 10);
-    } else if (!isActive && seconds !== 0) {
+    } else if (!isActive && time !== 0) {
       clearInterval(interval);
     }
     return () => clearInterval(interval);
-  }, [isActive, seconds]);
+  }, [isActive, time]);
+
+  const minutes = Math.floor(time / 60);
+  const seconds = time % 60;
+  const sevens = Math.floor(time / 10);
 
   return (
     <div className={`app ${darkMode ? "dark" : ""}`}>
@@ -62,26 +66,37 @@ function App() {
           <Col className="col-md-8 col-12">
             <Row>
               <div className="time w-100 d-flex justify-content-center">
-                <h1 style={{ fontSize: "10rem" }}>{seconds.toFixed(0)}</h1>
-                <h1 style={{ fontSize: "3rem", marginTop: "100px" }}>
-                  {(seconds % 1).toFixed(2).split(".")[1]}
-                </h1>
+                <span style={{ width: "10rem" }} className="d-flex d-flex-row">
+                  {minutes > 0 && (
+                    <h1 style={{ fontSize: "10rem" }}>{minutes}:</h1>
+                  )}
+                  <h1 style={{ fontSize: "10rem" }}>{seconds.toFixed(0)}</h1>
+                  <h1 style={{ fontSize: "3rem", marginTop: "100px" }}>
+                    {(time % 1).toFixed(2).split(".")[1]}
+                  </h1>
+                </span>
               </div>
             </Row>
             <Row>
-              <div className="actions w-100 d-flex justify-content-center">
-                <Button onClick={toggle} size="lg" className="circular-xl mx-2">
-                  {isActive ? "Pause" : "Start"}
-                </Button>
-                <Button
-                  variant={darkMode ? "outline-light" : "outline-secondary"}
-                  onClick={resetStopwatch}
-                  size="lg"
-                  className="circular-xl mx-2"
-                >
-                  Reset
-                </Button>
-              </div>
+              <Col>
+                <div className="actions w-100 d-flex justify-content-center">
+                  <Button
+                    onClick={toggle}
+                    size="lg"
+                    className="circular-xl mx-2"
+                  >
+                    {isActive ? "Pause" : "Start"}
+                  </Button>
+                  <Button
+                    variant={darkMode ? "outline-light" : "outline-secondary"}
+                    onClick={resetStopwatch}
+                    size="lg"
+                    className="circular-xl mx-2"
+                  >
+                    Reset
+                  </Button>
+                </div>
+              </Col>
             </Row>
           </Col>
           <Col className="col-md-4 col-12 mt-5">
@@ -111,6 +126,14 @@ function App() {
                 </div>
               </Row>
             </div>
+          </Col>
+        </Row>
+        <Row className="d-flex justify-content-center mt-5">
+          <Col className="col-12 text-center">
+            <h2>Reps of 7</h2>
+          </Col>
+          <Col className="col-12 text-center">
+            <h2>{sevens}</h2>
           </Col>
         </Row>
       </Container>
