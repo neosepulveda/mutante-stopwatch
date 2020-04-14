@@ -133,7 +133,7 @@ function App() {
             <h2>Reps of 7</h2>
           </Col>
           <Col className="col-12 text-center">
-            <h2>{sevens}</h2>
+            <h1 className="display-1">{sevens}</h1>
           </Col>
         </Row>
       </Container>
