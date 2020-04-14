@@ -30,6 +30,10 @@ function App() {
     setCounter(counter - 1);
   }
 
+  function backHalfMin() {
+    setTime(time - 30.0);
+  }
+
   useEffect(() => {
     let interval = null;
     if (isActive) {
@@ -43,8 +47,8 @@ function App() {
   }, [isActive, time]);
 
   const minutes = Math.floor(time / 60);
-  const seconds = time % 60;
-  const sevens = Math.floor(time / 10);
+  const seconds = time;
+  const sevens = time < 0 ? 0 : Math.floor(time / 10);
 
   return (
     <div className={`app ${darkMode ? "dark" : ""}`}>
@@ -70,7 +74,12 @@ function App() {
                   {minutes > 0 && (
                     <h1 style={{ fontSize: "10rem" }}>{minutes}:</h1>
                   )}
-                  <h1 style={{ fontSize: "10rem" }}>{seconds.toFixed(0)}</h1>
+                  <h1
+                    style={{ fontSize: "10rem" }}
+                    className={`${seconds < 0 ? "text-danger" : ""}`}
+                  >
+                    {seconds.toFixed(0)}
+                  </h1>
                   <h1 style={{ fontSize: "3rem", marginTop: "100px" }}>
                     {(time % 1).toFixed(2).split(".")[1]}
                   </h1>
@@ -94,6 +103,13 @@ function App() {
                     className="circular-xl mx-2"
                   >
                     Reset
+                  </Button>
+                  <Button
+                    variant={darkMode ? "outline-light" : "outline-secondary"}
+                    onClick={backHalfMin}
+                    className="circular-xl mx-2"
+                  >
+                    -30 s
                   </Button>
                 </div>
               </Col>
